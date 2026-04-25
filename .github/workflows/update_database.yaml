@@ -42,8 +42,17 @@ jobs:
         run: |
           cd fasolaminutes_parsing
           python3 insert_minutes.py
+<<<<<<< HEAD
           python3 parse_minutes.py
           python3 insert_locations.py
+=======
+          python3 create_aliases.py
+          python3 parse_minutes.py
+          python3 insert_locations.py
+          python3 create_leader_stats.py
+          python3 create_song_stats.py
+          python3 create_song_neighbors.py
+>>>>>>> 0e518c528866dc21eef9e01763a15c6ef607c3b5
 
       # Move the finished database into your package and push the changes
       - name: Commit and Push Updated Database

@@ -1,13 +1,23 @@
 Package: fasola
-Title: What the Package Does (One Line, Title Case)
+Title: Access and Query the Sacred Harp Singing Minutes Database
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Authors@R:
+    person("Jake", "Harmon", email = "jakebharmon@gmail.com", role = c("aut", "cre"))
+Description: Provides a tidy interface to a SQLite database of Sacred Harp
+    (shape-note) singing minutes, including leaders, songs, events, and
+    locations scraped from the fasolaminutes parsing pipeline.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 URL: https://github.com/jakebharmon/fasola
 BugReports: https://github.com/jakebharmon/fasola/issues
+Imports:
+    cli,
+    DBI,
+    dplyr,
+    fs,
+    jsonlite,
+    lubridate,
+    purrr,
+    RSQLite

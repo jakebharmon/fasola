@@ -1,73 +1,28 @@
 name: Monthly Database Update
 
-# 1. THE SCHEDULE
 on:
   schedule:
-    # This standard Cron syntax means: Run at 2:00 AM UTC on the 1st day of every month
     - cron: '0 2 1 * *'
-
-  # This line is crucial! It adds a "Run Workflow" button in GitHub
-  # so you can trigger it manually whenever you want.
   workflow_dispatch:
 
-# 2. THE SERVER INSTRUCTIONS
 jobs:
-  build-and-update-db:
+  update-db:
     runs-on: ubuntu-latest
 
     steps:
-      # Pull your R package code into the virtual server
       - name: Checkout fasola repository
         uses: actions/checkout@v4
 
-      # Setup Python for the scraper
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      # Install required Python libraries
-      # (Mark's pipeline uses scrapy to crawl the audio sites)
-      - name: Install dependencies
+      - name: Download latest minutes.db
         run: |
-          python -m pip install --upgrade pip
-          pip install scrapy
+          mkdir -p data
+          curl -L "https://github.com/marktgodfrey/fasolaminutes_parsing/blob/master/minutes.db?raw=true" \
+            -o data/database.sqlite
 
-      # Clone the original scraping pipeline
-      - name: Clone Mark's Pipeline
-        run: git clone https://github.com/marktgodfrey/fasolaminutes_parsing.git
-
-      # Run the pipeline to build the database from scratch
-      - name: Run Extraction Pipeline
+      - name: Commit and push updated database
         run: |
-          cd fasolaminutes_parsing
-          python3 insert_minutes.py
-<<<<<<< HEAD
-          python3 parse_minutes.py
-          python3 insert_locations.py
-=======
-          python3 create_aliases.py
-          python3 parse_minutes.py
-          python3 insert_locations.py
-          python3 create_leader_stats.py
-          python3 create_song_stats.py
-          python3 create_song_neighbors.py
->>>>>>> 0e518c528866dc21eef9e01763a15c6ef607c3b5
-
-      # Move the finished database into your package and push the changes
-      - name: Commit and Push Updated Database
-        run: |
-          # Create the data directory if it doesn't exist
-          mkdir -p inst/extdata
-
-          # Move the fresh database into the package
-          mv fasolaminutes_parsing/minutes.db inst/extdata/minutes.sqlite
-
-          # Tell Git who is making the commit
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-
-          # Commit the new file to your repository
-          git add inst/extdata/minutes.sqlite
+          git add data/database.sqlite
           git commit -m "Auto-update database from monthly pipeline run" || echo "No changes to commit"
           git push

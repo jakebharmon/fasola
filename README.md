@@ -1,6 +1,6 @@
 # fasola
 
-An R package for exploring Sacred Harp (shape-note) singing minutes — historical records of who led which songs, at which events, and where.
+An R package for exploring singing minutes from the Sacred Harp minutes data, including details on the songs themselves, leaders, locations we've sung at!
 
 ## Installation
 
@@ -20,13 +20,12 @@ devtools::install_github("jakebharmon/fasola")
 library(fasola)
 
 # Load the full dataset
+# N.B. The database is downloaded automatically on first use and cached locally.
 get_minutes()
 
 # The result is assigned to fasola_df in your environment
 head(fasola_df)
 ```
-
-The database is downloaded automatically on first use and cached locally.
 
 ## Dataset
 
@@ -55,31 +54,24 @@ get_minutes(include_song_detail = TRUE)
 # Add leader stats (lesson count, song entropy, top 20 count)
 get_minutes(include_leader_detail = TRUE)
 
-# Combine options
-get_minutes(include_location = TRUE, include_leader_detail = TRUE)
-```
-
-## Custom Queries
-
-Filter and transform using dplyr before the data is collected:
-
-```r
-# Leaders who have led at least 100 times
-get_minutes(query_fn = function(tbl) {
-  tbl |> dplyr::filter(lesson_count >= 100)
-})
+# Feel free to mix and match options, or get them all at once!
+get_minutes(include_location = TRUE,
+            include_song_detail = TRUE,
+            include_leader_detail = TRUE)
 ```
 
 ## Bonus
 
 ```r
-# Print a random Sacred Harp lyric
+# Print the lyrics of a random Sacred Harp song!
 feeling_lucky()
 ```
 
-## Data Source
+## Acknowledgements
 
-Singing minutes data scraped and maintained by [Mark Godfrey](https://github.com/marktgodfrey/fasolaminutes_parsing). Lyrics from the [Sacred Harp Publishing Company 2025 edition](https://github.com/Sacred-Harp-Publishing-Company/2025-edition).
+Singing minutes data scraped and maintained by [Mark Godfrey](https://github.com/marktgodfrey/fasolaminutes_parsing). Lyrics from the [Sacred Harp Publishing Company 2025 edition](https://github.com/Sacred-Harp-Publishing-Company/2025-edition). 
+
+Special thanks to the denizens of the Shapenote Data Research & Analytics Collective (ShaDRAC) for the inspiration and peer review!
 
 ## Roadmap
 
